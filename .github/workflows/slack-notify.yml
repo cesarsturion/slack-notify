@@ -35,7 +35,11 @@ jobs:
 
       - name: Current Log
         run: |
-          LOG=$(git log $LAST...$CURRENT --pretty=format:'%s - By %an' --no-merges | tr '"' "'")
+          if [ $CURRENT_TAG != $LAST ]; then
+            LOG=$(git log $LAST...$CURRENT --pretty=format:'%s - By %an' --no-merges | tr '"' "'")
+          else
+            LOG=$(git log --pretty=format:'%s - By %an' --no-merges | tr '"' "'")
+          fi
           echo "LOGS<<EOF" >> $GITHUB_ENV
           echo "$LOG" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
